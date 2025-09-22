@@ -72,7 +72,30 @@ def random(*args):
 def echo(*args):
     """Echo the input"""
     print(" ".join(args))
+    
+def loop(*args):
+    """Loop a command N times: loop N command args..."""
+    if len(args) < 2:
+        print("Error: usage loop N command args...")
+        return
+    try:
+        count = int(args[0])
+        if count < 1:
+            print("Error: loop count must be >= 1")
+            return
+    except ValueError:
+        print("Error: loop count must be an integer")
+        return
 
+    cmd = args[1].lower()
+    cmd_args = args[2:]
+
+    if cmd not in COMMANDS:
+        print(f"Unknown command inside loop: {cmd}")
+        return
+
+    for _ in range(count):
+        COMMANDS[cmd](*cmd_args)
 def help(*args):
     """Show help for commands"""
     print("Achilles Shield Commands:")
@@ -91,6 +114,7 @@ def unknown_command(cmd, *args):
 
 # --- Command Registry ---
 COMMANDS = {
+    "loop": loop,
     "greet": greet,
     "add": add,
     "multiply": multiply,
